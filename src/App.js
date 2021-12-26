@@ -10,7 +10,6 @@ class App extends React.Component {
   state = {
     images: initData.hits,
     modalImage: null,
-    // modalImage: initData.hits[2],
   };
 
   showModal = imageId => {
@@ -22,15 +21,24 @@ class App extends React.Component {
     this.setState({ modalImage: currentImage[0] });
   };
 
+  closeModal = () => {
+    this.setState({ modalImage: null });
+  };
+
   render() {
     // console.log(this.state.images[0]);
+    const { images, modalImage } = this.state;
 
     return (
       <>
         <Searchbar />
-        <ImageGallery images={this.state.images} showModal={this.showModal} />
-        <Button />
-        {this.state.modalImage && <Modal image={this.state.modalImage} />}
+        <ImageGallery images={images} showModal={this.showModal} />
+        <Button closeModal={this.closeModal} />
+        {this.state.modalImage && (
+          <Modal closeModal={this.closeModal}>
+            <img src={modalImage.largeImageURL} alt={modalImage.tags} />
+          </Modal>
+        )}
       </>
     );
   }
