@@ -4,7 +4,6 @@ import s from './ImageGallery.module.css';
 
 export default class ImageGallery extends Component {
   handleItemClick = id => {
-    // console.log('id item: ', id);
     this.props.showModal(id);
   };
 

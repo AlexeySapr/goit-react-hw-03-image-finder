@@ -9,7 +9,7 @@ export default class ImageGalleryItem extends Component {
 
   render() {
     const { webformatURL, tags } = this.props;
-    // console.log('largeImageURL ', this.props);
+
     return (
       <li className={s.galleryItem} onClick={this.handleClick}>
         <img src={webformatURL} alt={tags} className={s.imageGalleryItem} />
