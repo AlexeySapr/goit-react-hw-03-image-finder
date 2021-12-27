@@ -14,11 +14,17 @@ class App extends React.Component {
   };
 
   handleImages = imagesQuery => {
-    searchService.resetPage();
-    searchService.searchQuery = imagesQuery;
-    searchService.fetchSearch().then(images => {
-      this.setState({ images: images.hits });
-    });
+    if (imagesQuery) {
+      console.log('imagesQuery: ', imagesQuery);
+      searchService.resetPage();
+      searchService.searchQuery = imagesQuery;
+      searchService.fetchSearch().then(images => {
+        this.setState({ images: images.hits });
+      });
+    } else {
+      console.log('emty');
+      this.setState({ images: [] });
+    }
   };
 
   showModal = imageId => {
@@ -41,15 +47,14 @@ class App extends React.Component {
   };
 
   render() {
-    // console.log(this.state.images[0]);
     const { images, modalImage } = this.state;
 
     return (
       <>
         <Searchbar handleImages={this.handleImages} />
         <ImageGallery images={images} showModal={this.showModal} />
-        <Button loadMoreBtn={this.loadMore} />
-        {this.state.modalImage && (
+        {images.length > 0 && <Button loadMoreBtn={this.loadMore} />}
+        {modalImage && (
           <Modal closeModal={this.closeModal}>
             <img src={modalImage.largeImageURL} alt={modalImage.tags} />
           </Modal>
