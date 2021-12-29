@@ -41,11 +41,9 @@ class App extends React.Component {
     }
   };
 
-  showModal = imageId => {
-    const currentImage = this.state.images.filter(
-      image => image.id === imageId,
-    );
-    this.setState({ modalImage: currentImage[0] });
+  showModal = image => {
+    console.log('showModal');
+    this.setState({ modalImage: image });
   };
 
   closeModal = () => {
@@ -72,7 +70,7 @@ class App extends React.Component {
 
     return (
       <>
-        <Searchbar handleImages={this.handleImages} />
+        <Searchbar onSubmit={this.handleImages} />
         <ImageGallery images={images} showModal={this.showModal} />
         {loading && (
           <Loader

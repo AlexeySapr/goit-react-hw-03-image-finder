@@ -1,26 +1,21 @@
-import React, { Component } from 'react';
 import ImageGalleryItem from '../imageGalleryItem/ImageGalleryItem';
 import s from './ImageGallery.module.css';
 
-export default class ImageGallery extends Component {
-  handleItemClick = id => {
-    this.props.showModal(id);
-  };
+const ImageGallery = ({ images, showModal }) => {
+  return (
+    <ul className={s.imageGallery}>
+      {images.map(image => (
+        <ImageGalleryItem
+          key={image.id}
+          webformatURL={image.webformatURL}
+          tags={image.tags}
+          onItemClick={() => {
+            showModal(image);
+          }}
+        />
+      ))}
+    </ul>
+  );
+};
 
-  render() {
-    const { images } = this.props;
-    return (
-      <ul className={s.imageGallery}>
-        {images.map(image => (
-          <ImageGalleryItem
-            key={image.id}
-            webformatURL={image.webformatURL}
-            tags={image.tags}
-            id={image.id}
-            onItemClick={this.handleItemClick}
-          />
-        ))}
-      </ul>
-    );
-  }
-}
+export default ImageGallery;
