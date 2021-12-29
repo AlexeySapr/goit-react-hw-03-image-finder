@@ -75,8 +75,8 @@ class App extends React.Component {
     });
   };
 
-  showModal = image => {
-    this.setState({ modalImage: image });
+  showModal = modalImage => {
+    this.setState({ modalImage });
   };
 
   closeModal = () => {
