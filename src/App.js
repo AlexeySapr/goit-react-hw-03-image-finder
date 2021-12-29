@@ -14,56 +14,73 @@ import { searchService } from './services/searchAPI.js';
 
 class App extends React.Component {
   state = {
+    pageQuery: 1,
+    imagesQuery: null,
     images: [],
     modalImage: null,
     loading: false,
   };
 
   handleImages = imagesQuery => {
-    if (imagesQuery) {
-      this.setState({ loading: true });
-      searchService.resetPage();
-      searchService.searchQuery = imagesQuery;
-      searchService
-        .fetchSearch()
-        .then(images => {
-          if (images.hits.length === 0) {
-            toast.error('No images with this query!');
-          }
-          this.setState({ images: images.hits });
-        })
-        .catch(error => console.log(error.code))
-        .finally(() => {
-          this.setState({ loading: false });
-        });
-    } else {
+    if (!imagesQuery) {
       toast.warn('Enter some query!');
-      this.setState({ images: [] });
+      return this.setState({ images: [] });
+    } else {
+      this.setState({ pageQuery: 1, imagesQuery });
     }
   };
 
+  fetchImages = () => {
+    const { imagesQuery, pageQuery } = this.state;
+
+    this.setState({ loading: true });
+
+    searchService.searchQuery = imagesQuery;
+    searchService
+      .fetchSearch()
+      .then(images => {
+        if (images.hits.length === 0) {
+          toast.error('No images with this query!');
+        }
+        if (pageQuery > 1) {
+          this.setState(prevState => {
+            return { images: [...prevState.images, ...images.hits] };
+          });
+        } else {
+          this.setState({ images: images.hits });
+        }
+      })
+      .catch(error => toast.error(error.code))
+      .finally(() => {
+        this.setState({ loading: false });
+      });
+  };
+
+  componentDidUpdate(_, prevState) {
+    const { imagesQuery, pageQuery } = this.state;
+
+    if (prevState.imagesQuery !== imagesQuery) {
+      searchService.resetPage();
+      this.fetchImages();
+    }
+
+    if (prevState.pageQuery !== pageQuery) {
+      this.fetchImages();
+    }
+  }
+
+  loadMore = () => {
+    this.setState(prevState => {
+      return { pageQuery: prevState.pageQuery + 1 };
+    });
+  };
+
   showModal = image => {
-    console.log('showModal');
     this.setState({ modalImage: image });
   };
 
   closeModal = () => {
     this.setState({ modalImage: null });
-  };
-
-  loadMore = () => {
-    this.setState({ loading: true });
-    searchService
-      .fetchSearch()
-      .then(images => {
-        this.setState(prevState => {
-          return { images: [...prevState.images, ...images.hits] };
-        });
-      })
-      .catch(error => console.log(error.code))
-      .finally(() => {
-        this.setState({ loading: false });
-      });
   };
 
   render() {
