@@ -1,4 +1,5 @@
 import s from './Button.module.css';
+import PropTypes from 'prop-types';
 
 const Button = ({ loadMoreBtn }) => {
   return (
@@ -8,18 +9,8 @@ const Button = ({ loadMoreBtn }) => {
   );
 };
 
-export default Button;
+Button.propTypes = {
+  loadMoreBtn: PropTypes.func,
+};
 
-// export default class Button extends Component {
-//   render() {
-//     return (
-// <button
-//   type="button"
-//   className={s.button}
-//   onClick={this.props.loadMoreBtn}
-// >
-//   Load more
-// </button>
-//     );
-//   }
-// }
+export default Button;
