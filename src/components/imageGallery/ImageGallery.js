@@ -3,16 +3,17 @@ import s from './ImageGallery.module.css';
 import PropTypes from 'prop-types';
 
 const ImageGallery = ({ images, showModal }) => {
+  const onItemClick = image => {
+    showModal(image);
+  };
+
   return (
     <ul className={s.imageGallery}>
       {images.map(image => (
         <ImageGalleryItem
           key={image.id}
-          webformatURL={image.webformatURL}
-          tags={image.tags}
-          onItemClick={() => {
-            showModal(image);
-          }}
+          imageItem={image}
+          onItemClick={onItemClick}
         />
       ))}
     </ul>

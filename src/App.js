@@ -43,9 +43,9 @@ class App extends React.Component {
           toast.error('No images with this query!');
         }
         if (pageQuery > 1) {
-          this.setState(prevState => {
-            return { images: [...prevState.images, ...images.hits] };
-          });
+          this.setState(prevState => ({
+            images: [...prevState.images, ...images.hits],
+          }));
         } else {
           this.setState({ images: images.hits });
         }
